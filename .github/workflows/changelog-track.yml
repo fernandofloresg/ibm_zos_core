@@ -45,4 +45,4 @@ jobs:
         - name: Check for new file
           run: |
             echo "$LS_ALL and $LS_BASE"
-            [ "${#LS_ALL}" -gt "${#LS_BASE}" ] && : || echo "No new changelog file was found" && exit 1
+            [ "${#LS_ALL}" -gt "${#LS_BASE}" ] && true || echo "No new changelog file was found" && exit 1
