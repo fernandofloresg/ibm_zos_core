@@ -2,9 +2,6 @@ name: AC Ansible sanity
 
 on:
   pull_request:
-    branches:
-      - dev
-      - staging*
     paths-ignore:
       - '**.tar.gz'
       - 'pycache/'
