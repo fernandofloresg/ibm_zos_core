@@ -23,7 +23,7 @@ on:
       - 'changelogs/'
       - 'collections/'
       - 'docs/'
-      - 'scripts/'
+      - 'scripts/**'
       - 'test_config.yml'
       - 'tests/*.ini'
       - 'tests/*.py'
