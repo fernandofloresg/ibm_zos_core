@@ -32,8 +32,9 @@ jobs:
         source venv/venv-2.16/bin/activate
         python -m pip install --upgrade pip
         pip install bandit
+        pip install bandit_sarif_formatter
 
-    - name: Run ac-bandit
+    - name: Run ac_bandit
       run: |
         source venv/venv-2.16/bin/activate
         ./ac --ac-bandit --level l
