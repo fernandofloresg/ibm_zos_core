@@ -36,3 +36,9 @@ jobs:
       run: |
         source venv/venv-2.16/bin/activate
         ./ac --ac-bandit --level l
+
+    - name: SARIF
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: results.sarif
