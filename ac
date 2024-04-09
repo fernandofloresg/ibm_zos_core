@@ -220,7 +220,7 @@ ac_bandit(){
         option_level="ll"
     fi
     message "Running Bandit scan with level '$option_level'"
-    . $VENV_BIN/activate && python3 -m bandit -r plugins/* -"${option_level}"
+    . $VENV_BIN/activate && python3 -m bandit -r --format sarif plugins/* -"${option_level}" --output results.sarif
 }
 
 # ------------------------------------------------------------------------------
