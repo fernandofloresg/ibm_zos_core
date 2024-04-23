@@ -1,3 +1,8 @@
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
+# pylint: disable=redefined-outer-name
+# pylint: disable=too-many-lines
 # -*- coding: utf-8 -*-
 
 # Copyright (c) IBM Corporation 2020 - 2024
@@ -61,16 +66,11 @@ def create_sourcefile(hosts, volume):
     if len(starter) < 2:
         starter = "IMSTESTU"
     thisfile = starter + ".TTT.MNT.ZFS"
-    print(
-        "csf: starter={0} thisfile={1} is type {2}".format(
-            starter, thisfile, str(type(thisfile))
-        )
-    )
 
     hosts.all.shell(
         cmd="zfsadm define -aggregate "
         + thisfile
-        + " -volumes {0} -cylinders 200 1".format(volume),
+        + f" -volumes {volume} -cylinders 200 1",
         executable=SHELL_EXECUTABLE,
         stdin="",
     )
@@ -184,7 +184,6 @@ def test_basic_mount_with_bpx_nocomment_nobackup(ansible_zos_module, volumes_on_
         record_format="fba",
         record_length=80,
     )
-    print("\nbnn-Copying {0} to {1}\n".format(tmp_file_filename, dest_path))
     hosts.all.zos_copy(
         src=tmp_file_filename,
         dest=dest_path,
@@ -198,7 +197,9 @@ def test_basic_mount_with_bpx_nocomment_nobackup(ansible_zos_module, volumes_on_
             path="/pythonx",
             fs_type="zfs",
             state="mounted",
-            persistent=dict(data_store=dest_path),
+            persistent={
+                "data_store":dest_path
+            },
         )
 
         for result in mount_result.values():
@@ -251,10 +252,6 @@ def test_basic_mount_with_bpx_comment_backup(ansible_zos_module, volumes_on_syst
         executable=SHELL_EXECUTABLE,
         stdin="",
     )
-    for result in results.values():
-        print("\nbcb-destination result: {0}\n".format(result.get("stdout")))
-
-    print("\n====================================================\n")
 
     dest = get_tmp_ds_name()
     dest_path = dest + "(AUTO2)"
@@ -269,7 +266,6 @@ def test_basic_mount_with_bpx_comment_backup(ansible_zos_module, volumes_on_syst
         record_length=80,
     )
 
-    print("\nbcb-Copying {0} to {1}\n".format(tmp_file_filename, dest_path))
     hosts.all.zos_copy(
         src=tmp_file_filename,
         dest=dest_path,
@@ -285,12 +281,12 @@ def test_basic_mount_with_bpx_comment_backup(ansible_zos_module, volumes_on_syst
             path="/pythonx",
             fs_type="zfs",
             state="mounted",
-            persistent=dict(
-                data_store=dest_path,
-                backup="Yes",
-                backup_name=back_dest_path,
-                comment=["bpxtablecomment - try this", "second line of comment"],
-            ),
+            persistent={
+                "data_store":dest_path,
+                "backup":"Yes",
+                "backup_name":back_dest_path,
+                "comment":["bpxtablecomment - try this", "second line of comment"],
+            },
         )
         # copying from dataset to make editable copy on target
         test_tmp_file_filename = tmp_file_filename + "-a"
@@ -311,10 +307,8 @@ def test_basic_mount_with_bpx_comment_backup(ansible_zos_module, volumes_on_syst
         )
         data = ""
         for result in results.values():
-            print("\nbcb-postmount result: {0}\n".format(result.get("stdout")))
             data += result.get("stdout")
 
-        print("\n====================================================\n")
 
         for result in mount_result.values():
             assert result.get("rc") == 0
@@ -365,7 +359,10 @@ def test_basic_mount_with_tmp_hlq_option(ansible_zos_module, volumes_on_systems)
             fs_type="zfs",
             state="absent",
             tmp_hlq=tmphlq,
-            persistent=dict(data_store=persist_data_set, backup=True)
+            persistent={
+                "data_store":persist_data_set,
+                "backup":True
+            }
         )
         hosts.all.zos_data_set(name=persist_data_set, state="absent")
         for result in unmount_result.values():
